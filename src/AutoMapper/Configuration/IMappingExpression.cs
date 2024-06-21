@@ -1,6 +1,7 @@
 namespace AutoMapper;
 /// <summary>
 /// Mapping configuration options for non-generic maps
+/// 非通用映射的映射配置选项
 /// </summary>
 public interface IMappingExpression : IMappingExpressionBase<object, object, IMappingExpression>
 {

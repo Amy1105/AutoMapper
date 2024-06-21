@@ -47,6 +47,7 @@ public static class Extensions
         source.ToCore<TDestination>(configuration, parameters, membersToExpand.Select(memberName => ReflectionHelper.GetMemberPath(typeof(TDestination), memberName)));
     /// <summary>
     /// Extension method to project from a queryable using the provided mapping engine
+    /// 使用提供的映射引擎从可查询对象投影的扩展方法
     /// </summary>
     /// <remarks>Projections are only calculated once and cached</remarks>
     /// <param name="source">Queryable source</param>

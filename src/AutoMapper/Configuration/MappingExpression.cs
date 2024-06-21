@@ -1,5 +1,6 @@
 namespace AutoMapper.Configuration;
-public sealed class MappingExpression(MemberList memberList, TypePair types) : MappingExpressionBase<object, object, IMappingExpression>(memberList, types), IMappingExpression
+public sealed class MappingExpression(MemberList memberList, TypePair types) 
+    : MappingExpressionBase<object, object, IMappingExpression>(memberList, types), IMappingExpression
 {
     public MappingExpression(TypeMap typeMap) : this(typeMap.ConfiguredMemberList, typeMap.Types) => Projection = typeMap.Projection;
     public string[] IncludedMembersNames { get; internal set; } = [];

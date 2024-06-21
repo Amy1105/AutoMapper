@@ -4,6 +4,7 @@ namespace AutoMapper;
 
 /// <summary>
 /// Common mapping configuration options between generic and non-generic mapping configuration
+/// 通用和非通用映射配置之间的通用映射配置选项
 /// </summary>
 /// <typeparam name="TSource">Source type</typeparam>
 /// <typeparam name="TDestination">Destination type</typeparam>
@@ -53,7 +54,8 @@ public interface IProjectionExpressionBase<TSource, TDestination, out TMappingEx
 /// <typeparam name="TSource">Source type</typeparam>
 /// <typeparam name="TDestination">Destination type</typeparam>
 /// <typeparam name="TMappingExpression">Concrete return type for fluent interface</typeparam>
-public interface IMappingExpressionBase<TSource, TDestination, out TMappingExpression> : IProjectionExpressionBase<TSource, TDestination, TMappingExpression>
+public interface IMappingExpressionBase<TSource, TDestination, out TMappingExpression> 
+    : IProjectionExpressionBase<TSource, TDestination, TMappingExpression>
     where TMappingExpression : IMappingExpressionBase<TSource, TDestination, TMappingExpression>
 {
     /// <summary>

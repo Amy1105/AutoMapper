@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Main configuration object holding all mapping configuration for a source and destination type
+/// 主配置对象，包含源和目标类型的所有映射配置
 /// </summary>
 [DebuggerDisplay("{SourceType.Name} -> {DestinationType.Name}")]
 [EditorBrowsable(EditorBrowsableState.Never)]

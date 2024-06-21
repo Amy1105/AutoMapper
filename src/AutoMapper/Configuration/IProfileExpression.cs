@@ -2,6 +2,7 @@ namespace AutoMapper;
 
 /// <summary>
 /// Configuration for profile-specific maps
+/// 配置文件特定映射
 /// </summary>
 public interface IProfileExpression
 {

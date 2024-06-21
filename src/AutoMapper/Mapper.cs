@@ -7,6 +7,8 @@ public interface IMapperBase
     /// <summary>
     /// Execute a mapping from the source object to a new destination object.
     /// The source type is inferred from the source object.
+    /// 执行从源对象到新目标对象的映射。
+    /// 源类型是从源对象推断出来的。
     /// </summary>
     /// <typeparam name="TDestination">Destination type to create</typeparam>
     /// <param name="source">Source object to map from</param>
@@ -14,6 +16,7 @@ public interface IMapperBase
     TDestination Map<TDestination>(object source);
     /// <summary>
     /// Execute a mapping from the source object to a new destination object.
+    /// 执行从源对象到新目标对象的映射。
     /// </summary>
     /// <typeparam name="TSource">Source type to use</typeparam>
     /// <typeparam name="TDestination">Destination type to create</typeparam>
@@ -22,6 +25,7 @@ public interface IMapperBase
     TDestination Map<TSource, TDestination>(TSource source);
     /// <summary>
     /// Execute a mapping from the source object to the existing destination object.
+    /// 执行从源对象到现有目标对象的映射。
     /// </summary>
     /// <typeparam name="TSource">Source type to use</typeparam>
     /// <typeparam name="TDestination">Destination type</typeparam>
@@ -101,13 +105,17 @@ public interface IMapper : IMapperBase
     IConfigurationProvider ConfigurationProvider { get; }
     /// <summary>
     /// Project the input queryable.
+    /// 投影可查询的输入。
     /// </summary>
     /// <remarks>Projections are only calculated once and cached</remarks>
     /// <typeparam name="TDestination">Destination type</typeparam>
     /// <param name="source">Queryable source</param>
     /// <param name="parameters">Optional parameter object for parameterized mapping expressions</param>
     /// <param name="membersToExpand">Explicit members to expand</param>
-    /// <returns>Queryable result, use queryable extension methods to project and execute result</returns>
+    /// <returns>
+    /// Queryable result, use queryable extension methods to project and execute result
+    /// 可查询的结果，使用可查询的扩展方法来投影和执行结果
+    /// </returns>
     IQueryable<TDestination> ProjectTo<TDestination>(IQueryable source, object parameters = null, params Expression<Func<TDestination, object>>[] membersToExpand);
     /// <summary>
     /// Project the input queryable.
@@ -195,6 +203,7 @@ public sealed class Mapper : IMapper, IInternalRuntimeMapper
         TypePair requestedTypes = new(typeof(TSource), typeof(TDestination));
         TypePair runtimeTypes = new(source?.GetType() ?? sourceType ?? typeof(TSource), destination?.GetType() ?? destinationType ?? typeof(TDestination));
         MapRequest mapRequest = new(requestedTypes, runtimeTypes, memberMap);
-        return _configuration.GetExecutionPlan<TSource, TDestination>(mapRequest)(source, destination, context);
+        var result= _configuration.GetExecutionPlan<TSource, TDestination>(mapRequest)(source, destination, context);
+        return result;
     }
 }
