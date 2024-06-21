@@ -23,15 +23,15 @@ public class AutoMapperTester : IDisposable
     [Fact]
     public void t()
     {
-        List<DepartmentDto> departments = new List<DepartmentDto>() {
-             new DepartmentDto (){ Name="department11", Budget=11.1M},
-             new DepartmentDto (){Name="department11", Budget=11.1M},
-            };
+        //List<DepartmentDto> departments = new List<DepartmentDto>() {
+        //     new DepartmentDto (){ Name="department11", Budget=11.1M},
+        //     new DepartmentDto (){Name="department11", Budget=11.1M},
+        //    };
 
-        List<DepartmentDto> departments2 = new List<DepartmentDto>() {
-             new DepartmentDto (){ Name="department22", Budget=22.1M},
-             new DepartmentDto (){Name="department22", Budget=22.1M},
-            };
+        //List<DepartmentDto> departments2 = new List<DepartmentDto>() {
+        //     new DepartmentDto (){ Name="department22", Budget=22.1M},
+        //     new DepartmentDto (){Name="department22", Budget=22.1M},
+        //    };
 
         List<InstructorDto> instructorDtos = new List<InstructorDto>()
             {
@@ -48,9 +48,9 @@ public class AutoMapperTester : IDisposable
 
         var config = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<DepartmentDto, Department>();
+            cfg.CreateMap<CourseDto, Course>();           
             cfg.CreateMap<InstructorDto, Instructor>();
-            cfg.CreateMap<CourseDto, Course>();
+           // cfg.CreateMap<DepartmentDto, Department>();
         });
         var mapper = config.CreateMapper();
         var destination = mapper.Map<Course>(courseDto);
@@ -59,7 +59,6 @@ public class AutoMapperTester : IDisposable
     [Fact]
     public void t2()
     {
-
         var orderDto = new ex_OrderDto
         {
             OrderNumber = "20210801",
@@ -119,18 +118,18 @@ public class AutoMapperTester : IDisposable
     #region DTO
     public class CourseDto
     {
-        public int? CourseID { get; set; }
+        public int CourseID { get; set; }
 
         public string Title { get; set; } = string.Empty;
 
-        public int? Credits { get; set; }
+       // public int? Credits { get; set; }
 
         public List<InstructorDto> InstructorDtos { get; set; }
     }
 
     public class InstructorDto
     {
-        public int? ID { get; set; }
+        public int ID { get; set; }
 
         public string LastName { get; set; }
 
@@ -141,7 +140,7 @@ public class AutoMapperTester : IDisposable
 
     public class DepartmentDto
     {
-        public int? DepartmentID { get; set; }
+        public int DepartmentID { get; set; }
 
         public string Name { get; set; }
 
@@ -156,53 +155,36 @@ public class AutoMapperTester : IDisposable
     /// ¿Î³Ì
     /// </summary>
     public class Course
-    {
-        [Key]      
+    {      
         public int CourseID { get; set; }
-
-        [StringLength(50, MinimumLength = 3)]
+      
         public string Title { get; set; } = string.Empty;
 
-        [Range(0, 10)]
-        public int? Credits { get; set; }
+        //[Range(0, 10)]
+        //public int? Credits { get; set; }
 
-        public bool IsDeleted { get; set; } = false;
+        //public bool IsDeleted { get; set; } = false;
 
         //public ICollection<Enrollment> Enrollments { get; set; }
-        public ICollection<Instructor> Instructors { get; set; }
+        public List<Instructor> Instructors { get; set; }
     }
 
     public class Instructor
     {
         public int ID { get; set; }
-
-        [Required]
-        [Display(Name = "Last Name")]
-        [StringLength(50)]
+   
         public string LastName { get; set; } = string.Empty;
-
-        [Required]
-        [Column("FirstName")]
-        [Display(Name = "First Name")]
-        [StringLength(50)]
+       
         public string FirstMidName { get; set; } = string.Empty;
+     
+        //public DateTime HireDate { get; set; }
 
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Hire Date")]
-        public DateTime HireDate { get; set; }
+     
+        //public int CourseID { get; set; }
 
-        [Display(Name = "Full Name")]
-        public string FullName
-        {
-            get { return LastName + ", " + FirstMidName; }
-        }
-
-        public int CourseID { get; set; }
-
-        public Course Course { get; set; } = new Course();
+        //public Course Course { get; set; } = new Course();
       
-        public List<Department> departments { get; set; }
+        //public List<Department> departments { get; set; }
 
     }
 
