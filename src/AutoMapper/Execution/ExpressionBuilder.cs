@@ -337,7 +337,14 @@ public static class ExpressionBuilder
     public static MethodCallExpression Call(Expression target, string name, Expression[] arguments) =>
         Expression.Call(target, target.Type.GetInheritedMethod(name), arguments);
     public static Expression ToObject(this Expression expression) => expression.Type.IsValueType ? Convert(expression, typeof(object)) : expression;
-    public static Expression ToType(Expression expression, Type type) => expression.Type == type ? expression : Convert(expression, type);
+    //public static Expression ToType(Expression expression, Type type) => expression.Type == type ? expression : Convert(expression, type);
+
+    public static Expression ToType(Expression expression, Type type)
+    {
+        //Convert  创建 a System.Linq.Expressions.UnaryExpression that 表示类型转换操作。
+        return expression.Type == type ? expression : Convert(expression, type);
+    }
+
     public static Expression ReplaceParameters(this LambdaExpression initialLambda, Expression newParameter) =>
         new ParameterReplaceVisitor().Replace(initialLambda, newParameter);
     private static Expression Replace(this ParameterReplaceVisitor visitor, LambdaExpression initialLambda, Expression newParameter) =>

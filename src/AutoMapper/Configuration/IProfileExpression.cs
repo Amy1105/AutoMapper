@@ -137,6 +137,7 @@ public interface IProfileExpression
 
     /// <summary>
     /// Include extension methods against source members for matching destination members to. Default source extension methods from <see cref="System.Linq.Enumerable"/>
+    /// 包括源成员的扩展方法，以便将目标成员匹配到。默认源扩展方法来自System.Linq.Enumerable
     /// </summary>
     /// <param name="type">Static type that contains extension methods</param>
     void IncludeSourceExtensionMethods(Type type);

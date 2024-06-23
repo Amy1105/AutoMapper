@@ -60,8 +60,17 @@ public sealed class TypeMap
         => new InvalidOperationException($"Missing map from {sourceType} to {destinationType}. Create using CreateMap<{sourceType.Name}, {destinationType.Name}>.");
     public bool Projection { get; set; }
     public LambdaExpression MapExpression { get; private set; }
-    public Expression Invoke(Expression source, Expression destination) =>
-        Expression.Invoke(MapExpression, ToType(source, SourceType), ToType(destination, DestinationType), ContextParameter);
+    //public Expression Invoke(Expression source, Expression destination) =>
+    //    Expression.Invoke(MapExpression, ToType(source, SourceType), ToType(destination, DestinationType), ContextParameter);
+
+    public Expression Invoke(Expression source, Expression destination)
+    {
+        //   创建 an System.Linq.Expressions.InvocationExpression that 将委托或lambda表达式应用于参数表达式列表。
+        return Expression.Invoke(MapExpression, ToType(source, SourceType), ToType(destination, DestinationType), ContextParameter);
+    }
+
+
+
     internal bool CanConstructorMap() => Profile.ConstructorMappingEnabled && !DestinationType.IsAbstract &&
         !CustomConstruction && !HasTypeConverter && DestinationConstructors.Length > 0;
     public TypePair Types;
@@ -247,8 +256,14 @@ public sealed class TypeMap
     public void AddAfterMapAction(LambdaExpression afterMap) => Details.AddAfterMapAction(afterMap);
     public void AddValueTransformation(ValueTransformerConfiguration config) => Details.AddValueTransformation(config);
     public void ConstructUsingServiceLocator() => CustomCtorFunction = Lambda(ServiceLocator(DestinationType));
-    internal LambdaExpression CreateMapperLambda(IGlobalConfiguration configuration) =>
-        Types.ContainsGenericParameters ? null : new TypeMapPlanBuilder(configuration, this).CreateMapperLambda();
+    //internal LambdaExpression CreateMapperLambda(IGlobalConfiguration configuration) =>
+    //    Types.ContainsGenericParameters ? null : new TypeMapPlanBuilder(configuration, this).CreateMapperLambda();
+
+    internal LambdaExpression CreateMapperLambda(IGlobalConfiguration configuration)
+    {       
+          return  Types.ContainsGenericParameters ? null : new TypeMapPlanBuilder(configuration, this).CreateMapperLambda();        
+    }
+      
     private PropertyMap GetPropertyMap(string name)
     {
         if (_propertyMaps == null)

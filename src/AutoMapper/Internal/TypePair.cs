@@ -10,6 +10,10 @@ public readonly record struct MapRequest(TypePair RequestedTypes, TypePair Runti
 public readonly record struct TypePair(Type SourceType, Type DestinationType)
 {
     public bool IsConstructedGenericType => SourceType.IsConstructedGenericType || DestinationType.IsConstructedGenericType;
+
+    /// <summary>
+    /// 如果系统为true。Type对象本身是泛型类型参数或具有类型尚未提供特定类型的参数；否则为false。
+    /// </summary>
     public bool ContainsGenericParameters => SourceType.ContainsGenericParameters || DestinationType.ContainsGenericParameters;
     public TypePair CloseGenericTypes(TypePair closedTypes)
     {

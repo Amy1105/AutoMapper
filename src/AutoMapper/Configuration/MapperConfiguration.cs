@@ -59,19 +59,19 @@ public sealed class MapperConfiguration : IGlobalConfiguration
     public MapperConfiguration(MapperConfigurationExpression configurationExpression)
     {
         var configuration = (IGlobalConfigurationExpression)configurationExpression;
-        if (configuration.MethodMappingEnabled != false)
+        if (configuration.MethodMappingEnabled != false) //禁用方法映射。如果您不想让AutoMapper尝试从方法进行映射，请使用此选项。
         {
             configuration.IncludeSourceExtensionMethods(typeof(Enumerable));
         }
-        _mappers = [..configuration.Mappers];
-        _executionPlans = new(CompileExecutionPlan);
-        _validator = new(configuration);
-        _projectionBuilder = new(CreateProjectionBuilder);
+        _mappers = [..configuration.Mappers]; //  List<IObjectMapper> automapper提前定义的各种类型的映射方式
+        _executionPlans = new(CompileExecutionPlan);  //注册executionPlans委托方法
+        _validator = new(configuration);   //ConfigurationValidator 验证相关
+        _projectionBuilder = new(CreateProjectionBuilder);  //LazyValue<ProjectionBuilder> _projectionBuilder？  LazyValue
         Configuration = new((IProfileConfiguration)configuration);
         int typeMapsCount = Configuration.TypeMapsCount;
         int openTypeMapsCount = Configuration.OpenTypeMapsCount;
-        Profiles = new ProfileMap[configuration.Profiles.Count + 1];
-        Profiles[0] = Configuration;
+        Profiles = new ProfileMap[configuration.Profiles.Count + 1]; //声明ProfileMap 数组
+        Profiles[0] = Configuration;  //设置声明ProfileMap数组，第一个是Configuration
         int index = 1;
         foreach (var profile in configuration.Profiles)
         {
@@ -145,14 +145,15 @@ public sealed class MapperConfiguration : IGlobalConfiguration
         Delegate CompileExecutionPlan(MapRequest mapRequest)
         {
             var executionPlan = ((IGlobalConfiguration)this).BuildExecutionPlan(mapRequest);
-            return executionPlan.Compile(); // breakpoint here to inspect all execution plans
+            var s= executionPlan.Compile(); // breakpoint here to inspect all execution plans 此处的断点检查所有执行计划
+            return s;
         }
     }
     public MapperConfiguration(Action<IMapperConfigurationExpression> configure) : this(Build(configure)){}
     static MapperConfigurationExpression Build(Action<IMapperConfigurationExpression> configure)
     {
         MapperConfigurationExpression expr = new();
-        configure(expr);
+        configure(expr);  //MapperConfigurationExpression作为参数，执行configure委托
         return expr;
     }
     public void AssertConfigurationIsValid() => _validator.AssertConfigurationExpressionIsValid(this, [.._configuredMaps.Values]);
@@ -186,10 +187,26 @@ public sealed class MapperConfiguration : IGlobalConfiguration
             var source = Parameter(requestedTypes.SourceType, "source");
             var destination = Parameter(requestedDestinationType, "typeMapDestination");
             var checkNullValueTypeDest = CheckNullValueType(destination, typeMap.DestinationType);
-            return Lambda(ToType(typeMap.Invoke(source, checkNullValueTypeDest), requestedDestinationType), source, destination, ContextParameter);
+            var res = typeMap.Invoke(source, checkNullValueTypeDest);
+            var r = ToType(res, requestedDestinationType);
+
+            //Lambda 创建 a System.Linq.Expressions.LambdaExpression by 首先从表达式主体和参数表达式数组构造委托类型。当在编译时委托类型未知时，可以使用它。
+
+            return Lambda(r, source, destination, ContextParameter);
         }
-        static Expression CheckNullValueType(Expression expression, Type runtimeType) =>
-            !expression.Type.IsValueType && runtimeType.IsValueType ? Coalesce(expression, Default(runtimeType)) : expression;
+        //static Expression CheckNullValueType(Expression expression, Type runtimeType) =>
+        //    !expression.Type.IsValueType && runtimeType.IsValueType ? Coalesce(expression, Default(runtimeType)) : expression;
+
+        
+        static Expression CheckNullValueType(Expression expression, Type runtimeType)
+        {
+            //Coalesce  生成  a System.Linq.Expressions.BinaryExpression  表示合并操作
+            return !expression.Type.IsValueType && runtimeType.IsValueType ? Coalesce(expression, Default(runtimeType)) : expression;
+        }
+        
+
+
+        //生成ObjectMapper的express
         LambdaExpression GenerateObjectMapperExpression(in MapRequest mapRequest, IObjectMapper mapper)
         {
             var source = Parameter(mapRequest.RequestedTypes.SourceType, "source");

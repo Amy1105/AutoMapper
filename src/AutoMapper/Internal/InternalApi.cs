@@ -167,6 +167,7 @@ public interface IProfileExpressionInternal : IProfileExpression
     bool? EnableNullPropagationForQueryMapping { get; set; }
     /// <summary>
     /// Disable method mapping. Use this if you don't intend to have AutoMapper try to map from methods.
+    /// 禁用方法映射。如果您不想让AutoMapper尝试从方法进行映射，请使用此选项。
     /// </summary>
     bool? MethodMappingEnabled { get; set; }
     /// <summary>

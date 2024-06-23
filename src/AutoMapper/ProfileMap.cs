@@ -139,7 +139,7 @@ public sealed class ProfileMap
         var sourceMembers = configuration.SourceMembers;
         TypeMap typeMap = new(config.SourceType, config.DestinationType, this, config, sourceMembers);
         config.Configure(typeMap, sourceMembers);
-        configuration.RegisterTypeMap(typeMap);
+        configuration.RegisterTypeMap(typeMap);  //往MapperConfiguration类的 Dictionary<TypePair, TypeMap> _configuredMaps 对象中添加typemap
     }
     public void Configure(IGlobalConfiguration configuration)
     {
@@ -207,7 +207,7 @@ public sealed class ProfileMap
                     continue;
                 }
                 memberExpression ??= new(propertyMap.DestinationMember, typeMap.SourceType);
-                action.Action(propertyMap, memberExpression);
+                action.Action(propertyMap, memberExpression); //调用的是哪个action方法
             }
             memberExpression?.Configure(typeMap);
         }

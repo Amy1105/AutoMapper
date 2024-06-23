@@ -51,6 +51,7 @@ public interface IProfileConfiguration
 }
 /// <summary>
 ///     Provides a named configuration for maps. Naming conventions become scoped per profile.
+///     为映射提供命名配置。命名约定的作用域根据配置文件而定。
 /// </summary>
 public class Profile : IProfileExpressionInternal, IProfileConfiguration
 {
@@ -135,7 +136,7 @@ public class Profile : IProfileExpressionInternal, IProfileConfiguration
     private IMappingExpression<TSource, TDestination> CreateMapCore<TSource, TDestination>(MemberList memberList, bool projection = false)
     {
         MappingExpression<TSource, TDestination> mappingExp = new(memberList, projection);
-        _typeMapConfigs.Add(mappingExp);
+        _typeMapConfigs.Add(mappingExp); //  List<TypeMapConfiguration> 为什么能add MappingExpression<tsource,tdestination>
         return mappingExp;
     }
 
